@@ -29,10 +29,13 @@ class User extends REST_Controller {
 
     public function list_get()
     {
-        $query = $this->db->query("SELECT u.*, m.name as membership_name, um.end_date 
+        $sql = "SELECT u.*, m.name as membership_name, mh.end_date 
                                     FROM users u 
-                                    LEFT JOIN user_membership um ON(u.id=um.user_id AND um.status='1')
-                                    LEFT JOIN memberships m ON(um.membership_id=m.id)");
+                                    LEFT JOIN user_membership um ON(u.id=um.user_id AND um.status='1') 
+                                    LEFT JOIN membership_history mh ON(mh.id=um.mh_id) 
+                                    LEFT JOIN memberships m ON(mh.membership_id=m.id)";
+        //echo $sql;die;
+        $query = $this->db->query($sql);
         $result = $query->result_array();
 
         $this->set_response($result, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
