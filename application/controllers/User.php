@@ -29,7 +29,10 @@ class User extends REST_Controller {
 
     public function list_get()
     {
-        $query = $this->db->query("select * from users");
+        $query = $this->db->query("SELECT u.*, m.name as membership_name, um.end_date 
+                                    FROM users u 
+                                    LEFT JOIN user_membership um ON(u.id=um.user_id AND um.status='1')
+                                    LEFT JOIN memberships m ON(um.membership_id=m.id)");
         $result = $query->result_array();
 
         $this->set_response($result, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
