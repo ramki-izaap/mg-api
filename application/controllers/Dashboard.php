@@ -61,7 +61,7 @@ class Dashboard extends REST_Controller {
     {
         $result = array();
 
-        for($i=1;$i<=8;$i++){
+        for($i=5;$i>=0;$i--){
 
             $current_month = date('Y-m', strtotime(date('Y-m')." -".$i." month"));;
 
