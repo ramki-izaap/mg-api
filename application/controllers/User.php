@@ -33,7 +33,7 @@ class User extends REST_Controller {
                                     FROM users u 
                                     LEFT JOIN user_membership um ON(u.id=um.user_id AND um.status='1') 
                                     LEFT JOIN membership_history mh ON(mh.id=um.mh_id) 
-                                    LEFT JOIN memberships m ON(mh.membership_id=m.id)";
+                                    LEFT JOIN memberships m ON(mh.membership_id=m.id) ORDER BY u.id DESC";
         //echo $sql;die;
         $query = $this->db->query($sql);
         $result = $query->result_array();
@@ -98,6 +98,8 @@ class User extends REST_Controller {
     {
         $user_id         = $this->post('id');
 
+        //echo $this->post('id');die;
+
         $name = $this->post('name');
         $age = $this->post('age');
         $sex = $this->post('sex');
@@ -120,6 +122,7 @@ class User extends REST_Controller {
         $membership_no          = $this->post('membership_no');
         $start_date             = $this->post('start_date');
         $end_date               = $this->post('end_date');
+        $amount                 = $this->post('amount');
 
         $data = array(
                         'name' => $name, 
@@ -145,6 +148,7 @@ class User extends REST_Controller {
         $mem_data = array(
                         'membership_id' => $membership_id, 
                         'membership_no' => $membership_no, 
+                        'amount' => $amount,
                         'start_date' => $start_date, 
                         'end_date' => $end_date
                     );
@@ -154,6 +158,15 @@ class User extends REST_Controller {
         if( (int)$user_id )
         {
             $data['edited_on'] = date('Y-m-d H:i:s');
+
+            $this->db->where('id', $user_id);
+            $this->db->update('users', $data);
+
+            //$this->db->where('user_id', $user_id);
+            //$this->db->update('contact_details', $contact_data);
+
+            $this->db->where('user_id', $user_id);
+            $this->db->update('contact_details', $contact_data);
 
 
         }
@@ -168,11 +181,23 @@ class User extends REST_Controller {
 
             if( $user_id )
             {
+                //insert contact info
                 $contact_data['user_id']    = $user_id;
-                $mem_data['user_id']        = $user_id;
-
-                $this->db->insert('user_membership', $mem_data);
                 $this->db->insert('contact_details', $contact_data);
+
+                //insert membership info
+                $mem_data['user_id']        = $user_id;
+                $this->db->insert('membership_history', $mem_data);
+
+                //insert mapping info
+                $mh_id = $this->db->insert_id();
+                $membership_map_data = array();
+                $membership_map_data['user_id'] = $user_id;
+                $membership_map_data['mh_id']   = $mh_id;
+                $membership_map_data['status']  = '1';
+                $this->db->insert('user_membership', $membership_map_data);
+                
+                
             }
         }
 
@@ -185,13 +210,20 @@ class User extends REST_Controller {
     {
         $query = $this->db->query("SELECT u.*, 
                                             um.id as um_id, 
-                                            um.user_id, 
-                                            um.membership_id, 
-                                            um.membership_no,
-                                            um.amount,
-                                            um.start_date,
-                                            um.end_date 
-                                    FROM users u LEFT JOIN user_membership um ON(u.id=um.user_id) 
+                                            mh.membership_id, 
+                                            mh.membership_no,
+                                            mh.amount,
+                                            mh.start_date,
+                                            mh.end_date,
+                                            cd.name as contact_name,
+                                            cd.relationship as contact_relationship,
+                                            cd.mobile_no as contact_mobile_no,
+                                            cd.resident_no as contact_resident_no 
+                                    FROM users u 
+                                    LEFT JOIN user_membership um ON(u.id=um.user_id ) 
+                                    LEFT JOIN membership_history mh ON(mh.id=um.mh_id) 
+                                    LEFT JOIN memberships m ON(mh.membership_id=m.id) 
+                                    LEFT JOIN contact_details cd ON(cd.user_id=u.id)  
                                     WHERE u.id=".$id);
         $result = $query->row_array();
         
