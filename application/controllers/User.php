@@ -29,7 +29,7 @@ class User extends REST_Controller {
 
     public function list_get()
     {
-        $sql = "SELECT u.*, m.name as membership_name, mh.end_date 
+        $sql = "SELECT u.*, m.name as membership_name, mh.amount, mh.end_date, um.mh_id 
                                     FROM users u 
                                     LEFT JOIN user_membership um ON(u.id=um.user_id AND um.status='1') 
                                     LEFT JOIN membership_history mh ON(mh.id=um.mh_id) 
@@ -229,6 +229,18 @@ class User extends REST_Controller {
         
 
         $this->set_response($result, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
+
+    public function delete_post()
+    {
+        $id = $this->post('id');
+
+        $this->db->where('id', $id);
+        $this->db->delete('users');
+
+        $result = array('status' => 'SUCCESS');
+
+        $this->set_response($result, REST_Controller::HTTP_OK); 
     }
 
     

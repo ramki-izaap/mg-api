@@ -39,17 +39,22 @@ class Dashboard extends REST_Controller {
         $result[] = array("color"=>"pieColor","description"=>date('M')." Paid","stats"=>number_format((float)$res1['amount']),"icon"=>"money");
        
         //total user count
-        $query2 = $this->db->query("SELECT count(u.id) as count FROM users u JOIN user_membership um ON(u.id=um.user_id)  WHERE um.status='Y' ");
+        $query2 = $this->db->query("SELECT count(u.id) as count FROM users u JOIN user_membership um ON(u.id=um.user_id)  WHERE um.status='1' ");
         $res2 = $query2->row_array();
         $result[] = array("color"=>"pieColor","description"=>"Total Users","stats"=>$res2['count'],"icon"=>"person");
 
         //Currrnt month usera count
-        $query3 = $this->db->query("SELECT count(u.id) as count FROM users u JOIN user_membership um ON(u.id=um.user_id)  WHERE um.status='Y' AND DATE_FORMAT(created_on,'%Y-%m')='".$current_month."'");
+        $query3 = $this->db->query("SELECT count(u.id) as count FROM users u JOIN user_membership um ON(u.id=um.user_id)  WHERE um.status='1' AND DATE_FORMAT(created_on,'%Y-%m')='".$current_month."'");
         $res3 = $query3->row_array();
         $result[] = array("color"=>"pieColor","description"=>"Join this month","stats"=>$res3['count'],"icon"=>"person");
 
         //Income amount in this month
-        $query4 = $this->db->query("SELECT sum(amount) as amount FROM membership_history WHERE DATE_FORMAT(created_date,'%Y-%m')='".$current_month."'");
+        $sql = "SELECT sum(p.amount) as amount 
+                    FROM membership_history mh
+                    LEFT JOIN payment p ON(p.mh_id=mh.id)
+                    WHERE DATE_FORMAT(p.paid_date,'%Y-%m')='".$current_month."'";
+
+        $query4 = $this->db->query($sql);
         $res4 = $query4->row_array();
         $result[] = array("color"=>"pieColor","description"=>date('M')." Income","stats"=>number_format((float)$res4['amount']),"icon"=>"money");
 

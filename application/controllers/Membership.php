@@ -84,5 +84,48 @@ class Membership extends REST_Controller {
         $this->set_response($result, REST_Controller::HTTP_OK); 
     }
 
+    public function paid_amount_get( $user_id = 0, $mh_id = 0 )
+    {
+        $sql = "SELECT IF(sum(amount),sum(amount), '0') as amount from payment WHERE user_id=".$user_id.' AND mh_id='.$mh_id;
+        //echo $sql;die;
+        $query = $this->db->query($sql);
+        $result = $query->row_array();
+        
+
+        $this->set_response($result, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
+    }
+
+    public function add_payment_post()
+    {
+        $id    = $this->post('id');
+
+        $user_id    = $this->post('user_id');
+        $mh_id      = $this->post('mh_id');
+        $amount     = $this->post('amount');
+
+        if( (int)$id )
+        {
+            $this->db->set('user_id', $user_id);
+            $this->db->set('mh_id', $mh_id);
+            $this->db->set('amount', $amount);
+
+            $this->db->where('id', $id);
+            $this->db->update('payment');
+        }
+        else
+        {
+            $data = array('user_id' => $user_id, 'mh_id' => $mh_id, 'amount' => $amount);
+            $data['paid_date'] = date('Y-m-d H:i:s');
+            
+            $this->db->insert('payment', $data);
+        }
+        
+
+        $result = array('status' => 'SUCCESS');
+
+        $this->set_response($result, REST_Controller::HTTP_OK); 
+    }
+
+
     
 }
