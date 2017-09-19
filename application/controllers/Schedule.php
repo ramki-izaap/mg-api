@@ -27,11 +27,18 @@ class Schedule extends REST_Controller {
         
     }
 
-    public function list_get()
+    public function list_get( $user_id = 0 )
     {
         $sql = "SELECT s.*, u.name as user_name 
                                     FROM schedule s 
-                                    LEFT JOIN users u ON(u.id=s.user_id)  ORDER BY s.id DESC";
+                                    LEFT JOIN users u ON(u.id=s.user_id) ";
+
+        if( $user_id )
+        {
+            $sql .= " WHERE u.id=".$user_id; 
+        }
+
+        $sql .= " ORDER BY s.id DESC";
         //echo $sql;die;
         $query = $this->db->query($sql);
         $result = $query->result_array();

@@ -226,6 +226,27 @@ class User extends REST_Controller {
                                     LEFT JOIN contact_details cd ON(cd.user_id=u.id)  
                                     WHERE u.id=".$id);
         $result = $query->row_array();
+
+        //payment info
+        $sql = "SELECT u.id, u.name as user_name,u.email,
+                        um.mh_id,
+                        m.name as membership_name,
+                        mh.amount as membership_amount,
+                        IF(SUM(p.amount),SUM(p.amount),0) as paid_amount,
+                        (mh.amount-IF(SUM(p.amount),SUM(p.amount),0)) as balance_amount
+                            FROM `users` u 
+                            LEFT JOIN user_membership um ON(um.user_id=u.id) 
+                            LEFT JOIN membership_history mh ON(mh.id=um.mh_id) 
+                            LEFT JOIN memberships m ON(mh.membership_id=m.id)
+                            LEFT JOIN payment p ON(p.mh_id=mh.id) 
+                            WHERE u.id=".$id." 
+                            GROUP BY mh.id";
+
+
+        //echo $sql;die;
+        $query = $this->db->query($sql);
+        $result['payment_info'] = $query->row_array();
+
         
 
         $this->set_response($result, REST_Controller::HTTP_OK); // OK (200) being the HTTP response code
