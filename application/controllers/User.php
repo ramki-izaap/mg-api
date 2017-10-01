@@ -6,6 +6,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 /** @noinspection PhpIncludeInspection */
 require APPPATH . 'libraries/REST_Controller.php';
 
+
+
 /**
  * This is an example of a few basic user interaction methods you could use
  * all done with a hardcoded array
@@ -264,5 +266,9 @@ class User extends REST_Controller {
         $this->set_response($result, REST_Controller::HTTP_OK); 
     }
 
+    public function test_get()
+    {
+        sendSMS(array('8056285768'),'My test message 001122');
+    }
     
 }
