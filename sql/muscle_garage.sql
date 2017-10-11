@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 19, 2017 at 06:48 AM
+-- Generation Time: Oct 11, 2017 at 09:14 PM
 -- Server version: 10.1.25-MariaDB
 -- PHP Version: 5.6.31
 
@@ -66,7 +66,31 @@ CREATE TABLE `contact_details` (
 INSERT INTO `contact_details` (`id`, `user_id`, `name`, `relationship`, `mobile_no`, `resident_no`) VALUES
 (1, 1, 'LLLLLL', '', '777777777777', ''),
 (2, 2, 'shdkjsahdkjh', '', '97778979879', ''),
-(3, 3, 'sdsadsa', '', '56456456', '');
+(3, 3, 'sdsadsa', '', '56456456', ''),
+(4, 2, 'DDDDDDDD', '', '888888888888', '');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `expense`
+--
+
+CREATE TABLE `expense` (
+  `id` int(11) NOT NULL,
+  `name` varchar(250) NOT NULL,
+  `description` text NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `paid_date` date NOT NULL,
+  `created_date` datetime NOT NULL,
+  `updated_date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `expense`
+--
+
+INSERT INTO `expense` (`id`, `name`, `description`, `amount`, `paid_date`, `created_date`, `updated_date`) VALUES
+(0, '11111', 'sdsadsad', '12.00', '2017-10-14', '2017-10-10 10:25:34', '2017-10-10 08:25:34');
 
 -- --------------------------------------------------------
 
@@ -128,7 +152,8 @@ CREATE TABLE `membership_history` (
 INSERT INTO `membership_history` (`id`, `user_id`, `membership_id`, `membership_no`, `amount`, `start_date`, `end_date`, `created_date`, `paid`) VALUES
 (1, 1, 1, 'D900RPJHAW7', 1500.5, '2017-09-18', '2018-09-18', '0000-00-00', 0),
 (2, 2, 1, 'EHH1S83FP0D', 1500.5, '2017-09-18', '2018-09-18', '0000-00-00', 0),
-(3, 3, 1, 'WUFMOEN3I1P', 1500.5, '2017-09-18', '2018-09-18', '0000-00-00', 0);
+(3, 3, 1, 'WUFMOEN3I1P', 1500.5, '2017-09-18', '2018-09-18', '0000-00-00', 0),
+(4, 2, 3, '9BTMP9EN56W', 1500.5, '2017-10-12', '2018-10-12', '0000-00-00', 0);
 
 -- --------------------------------------------------------
 
@@ -154,7 +179,12 @@ INSERT INTO `payment` (`id`, `user_id`, `mh_id`, `amount`, `paid_date`) VALUES
 (3, 1, 1, '10.00', '2017-09-19 04:52:20'),
 (4, 1, 1, '10.00', '2017-09-19 04:52:58'),
 (5, 1, 1, '20.00', '2017-09-19 04:55:39'),
-(6, 1, 1, '5.00', '2017-09-19 04:58:23');
+(6, 1, 1, '5.00', '2017-09-19 04:58:23'),
+(7, 1, 1, '100.00', '2017-09-19 09:46:02'),
+(8, 1, 1, '50.00', '2017-09-19 09:46:34'),
+(9, 1, 1, '100.00', '2017-09-20 06:49:27'),
+(10, 2, 2, '500.00', '2017-10-11 21:12:08'),
+(11, 1, 1, '100.00', '2017-10-11 21:12:34');
 
 -- --------------------------------------------------------
 
@@ -211,7 +241,8 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `name`, `email`, `facebook`, `age`, `sex`, `dob`, `mobile_no`, `resident_no`, `address`, `referred_by`, `created_on`, `edited_on`) VALUES
-(1, 'Ramakrishnan K', 'asasas@aa.com', 'asasas@aa.com', 32, 'F', '1985-09-06', '111111111111111', '222222222222222', 'sdsadasdsa\nsadsad\nsadsa', 'ssfsfsf', '2017-09-18 19:22:10', '2017-09-18 19:25:41');
+(1, 'Ramakrishnan K', 'asasas@aa.com', 'asasas@aa.com', 32, 'F', '1985-09-06', '111111111111111', '222222222222222', 'sdsadasdsa\nsadsad\nsadsa', 'ssfsfsf', '2017-09-18 19:22:10', '2017-09-18 19:25:41'),
+(2, 'Saravanan', '123@123.com', '123@1234.com', 32, 'M', '1985-10-04', '1234567890', '121213213213', 'sdfsdfsdf\ndsfdsf\nsdfsdf', 'dfdsfsd', '2017-10-11 21:11:22', '2017-10-12 00:41:22');
 
 -- --------------------------------------------------------
 
@@ -233,7 +264,8 @@ CREATE TABLE `user_membership` (
 INSERT INTO `user_membership` (`id`, `user_id`, `mh_id`, `status`) VALUES
 (1, 1, 1, 1),
 (2, 2, 2, 1),
-(3, 3, 3, 1);
+(3, 3, 3, 1),
+(4, 2, 4, 1);
 
 --
 -- Indexes for dumped tables
@@ -300,7 +332,7 @@ ALTER TABLE `admin_user`
 -- AUTO_INCREMENT for table `contact_details`
 --
 ALTER TABLE `contact_details`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `memberships`
 --
@@ -310,12 +342,12 @@ ALTER TABLE `memberships`
 -- AUTO_INCREMENT for table `membership_history`
 --
 ALTER TABLE `membership_history`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT for table `payment`
 --
 ALTER TABLE `payment`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT for table `schedule`
 --
@@ -325,12 +357,12 @@ ALTER TABLE `schedule`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `user_membership`
 --
 ALTER TABLE `user_membership`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;COMMIT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
