@@ -26,6 +26,8 @@ class User extends REST_Controller {
         // Construct the parent class
         parent::__construct();
 
+        $this->load->helper(array('form', 'url'));
+
         
     }
 
@@ -112,6 +114,9 @@ class User extends REST_Controller {
         $referred_by = $this->post('referred_by');
         $email = $this->post('email');
         $facebook = $this->post('facebook');
+        $profile_image = $this->post('profile_image');
+        $anniversary_date = $this->post('anniversary_date');
+        $martial_status = $this->post('martial_status');
 
 
         $contact_name           = $this->post('contact_name');
@@ -136,7 +141,10 @@ class User extends REST_Controller {
                         'address' => $address,
                         'referred_by' => $referred_by,
                         'email' => $email,
-                        'facebook' => $facebook
+                        'facebook' => $facebook,
+                        'profile_image' => $profile_image,
+                        'martial_status' => $martial_status,
+                        'anniversary_date' => $anniversary_date
                     );
 
         $contact_data = array(
@@ -266,9 +274,40 @@ class User extends REST_Controller {
         $this->set_response($result, REST_Controller::HTTP_OK); 
     }
 
+    public function upload_post()
+    {
+        $result = $this->do_upload('file');
+
+        $this->set_response($result, REST_Controller::HTTP_OK); 
+    }
+
+    public function do_upload( $fname )
+    {
+        $config['upload_path']          = './uploads/';
+        $config['allowed_types']        = 'gif|jpg|png';
+        
+
+        $this->load->library('upload', $config);
+
+        if ( ! $this->upload->do_upload( $fname ))
+        {
+            $data = array('error' => $this->upload->display_errors());
+        }
+        else
+        {
+            $data = array('upload_data' => $this->upload->data());
+        }
+
+        return $data;
+
+
+    }
+
     public function test_get()
     {
         sendSMS(array('8056285768'),'My test message 001122');
     }
+
+
     
 }

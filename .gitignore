@@ -7,7 +7,7 @@ application/cache/*
 application/logs/*
 !application/logs/index.html
 !application/logs/.htaccess
-
+uploads
 composer.lock
 
 user_guide_src/build/*
