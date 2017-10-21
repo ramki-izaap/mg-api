@@ -105,6 +105,10 @@ class Lead extends REST_Controller {
             $this->db->insert('leads', $data);
 
             $user_id = $this->db->insert_id();
+
+            //send Welcome SMS
+            $message = getSMSContent('welcome', array('name' => $name));
+            sendSMS(array($mobile_no), $message);
         }
 
         $result = array('status' => 'SUCCESS');

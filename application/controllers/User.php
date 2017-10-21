@@ -206,6 +206,16 @@ class User extends REST_Controller {
                 $membership_map_data['mh_id']   = $mh_id;
                 $membership_map_data['status']  = '1';
                 $this->db->insert('user_membership', $membership_map_data);
+
+                //send confirmation SMS
+                $sms_data = array(
+                                    'membership_name' => $name,
+                                    'amount' => 'Rs.'.$amount,
+                                    'expired_at' => $end_date
+                                    );
+
+                $message = getSMSContent('membership_confirmation', $sms_data);
+                sendSMS(array($mobile_no), $message);
                 
                 
             }
@@ -305,7 +315,8 @@ class User extends REST_Controller {
 
     public function test_get()
     {
-        sendSMS(array('8056285768'),'My test message 001122');
+        echo getSMSContent('welcome', array('name' => 'Ram'));
+        sendSMS(array('7904949930'),'My test message 0001');
     }
 
 
