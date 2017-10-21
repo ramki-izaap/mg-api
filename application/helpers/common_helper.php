@@ -40,6 +40,10 @@ function getSMSContent($type = '', $data = array())
 		case 'membership_expiry_confirmation':
 			$template = 'Hi {name}, Your membership is due for renewal. Renew before {expired_at}.';
 			break;
+
+		case 'payment_due':
+			$template = 'Hi {name}, Your payment is due. ';
+			break;
 		
 		default:
 			$template = 'Hi {name}, Welcome to Muscle Garage.';
