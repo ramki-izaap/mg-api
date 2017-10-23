@@ -12,10 +12,11 @@ function sendSMS($numbers, $message)
 	{
 	    $result = $textlocal->sendSms($numbers, $message, $sender);
 	    
-	    print_r($result);
+	    return $result;
+	    //print_r($result);
 	} catch (Exception $e) 
 	{
-	    die('Error: ' . $e->getMessage());
+	    return array('error' => $e->getMessage());//die('Error: ' . $e->getMessage());
 	}
 }
 

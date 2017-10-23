@@ -8,6 +8,12 @@ class Cron extends CI_Controller {
 		echo 'YYYYYYYY';
 	}
 
+    public function test()
+    {
+        $data = array('comments' => 'hjsdgfh sdhfdsh');
+        $this->db->insert('test', $data);
+    }
+
 	function membership_expired( $days = 7 )
 	{
 		$sql = "SELECT u.id, u.name as user_name, u.mobile_no, u.email, 

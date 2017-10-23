@@ -316,7 +316,7 @@ class User extends REST_Controller {
     public function test_get()
     {
         echo getSMSContent('welcome', array('name' => 'Ram'));
-        sendSMS(array('7904949930'),'My test message 0001');
+        //sendSMS(array('7904949930'),'My test message 000ooo');
     }
 
 
